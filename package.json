@@ -1,0 +1,64 @@
+{
+  "name": "easycode-static-watcher",
+  "version": "0.0.1",
+  "author": "WangXiaojin",
+  "description": "this is watching static files project",
+  "main": "index.js",
+  "cfg": {
+  	"jsPaths": [
+      "../easycode-static/list/js"
+    ],
+    "cssPaths": [
+      "../easycode-static/list/css",
+      "../easycode-static/list/js"
+    ],
+    "htmlPaths": [
+      "../easycode-static/list/html"
+    ],
+    "baseDir": "../easycode-static/list",
+    "basePaths": ["//cdn.domain.com"]
+  },
+  "cfgStandby": {
+    "jsPaths": [
+      "../easycode-static/list/js"
+    ],
+    "cssPaths": [
+    	{
+    		"baseDir": "../easycode-static/list",
+    		"basePaths": ["//cdn.domain.com"],
+    		"filePaths": ["../easycode-static/list/css", "../easycode-static/list/js"]
+    	},
+    	{
+    		"baseDir": "../auth-backend",
+    		"basePaths": ["//auth.domain.com"],
+    		"filePaths": ["../auth-backend/css", "../auth-backend/js"]
+    	},
+    	{
+    		"baseDir": "/data/webroot/xxx",
+    		"basePaths": ["//xxx1.domain.com", "//xxx2.domain.com"],
+    		"filePaths": ["/data/webroot/xxx/css", "/data/webroot/xxx/js"]
+    	}
+    ],
+    "htmlPaths": [
+      "../easycode-static/list/html"
+    ]
+  },
+  "devDependencies": {
+    "async": "^1.5.2",
+    "grunt": "^0.4.5",
+    "grunt-contrib-clean": "^0.7.0",
+    "grunt-contrib-compress": "^0.14.0",
+    "grunt-contrib-concat": "^0.5.1",
+    "grunt-contrib-copy": "^0.8.2",
+    "grunt-contrib-cssmin": "^0.14.0",
+    "grunt-contrib-htmlmin": "^0.6.0",
+    "grunt-contrib-jshint": "^0.11.3",
+    "grunt-contrib-uglify": "^0.11.0",
+    "grunt-contrib-watch": "^0.6.1",
+    "grunt-newer": "^1.1.1",
+    "mime": "^1.3.4",
+    "node-units": "^0.1.7",
+    "request": "^2.69.0",
+    "time-grunt": "^1.3.0"
+  }
+}
