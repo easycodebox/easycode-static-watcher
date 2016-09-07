@@ -31,7 +31,7 @@ Node.js的安装及运行
 5. 进入easycode-static-watcher所在目录，安装模块
 
 	```bash
-	cd /zii/webroot/easycode-static-watcher
+	cd /data/webroot/easycode-static-watcher
 	npm install
 	```
 
