@@ -5,23 +5,17 @@ module.exports = function(grunt) {
 
     var pkg = grunt.file.readJSON('package.json'),
     	cssPaths = (function() {
-	    	if(!pkg.cfg.cssPaths[0].baseDir) {
-	    		//单个baseDir的配置
-	    		return pkg.cfg.cssPaths;
-	    	}else {
-	    		//多个baseDir的配置
-	    		var cssPaths = [];
-	    		pkg.cfg.cssPaths.forEach(function(item) {
-	    			if(item) {
-	    				item.filePaths.forEach(function(ele) {
-	    					if(ele) {
-	    						cssPaths.push(ele);
-	    					}
-	    				});
-	    			}
-	    		});
-	    		return cssPaths;
-	    	}
+    		var cssPaths = [];
+    		pkg.cfg.cssPaths.forEach(function(item) {
+    			if(item) {
+    				item.filePaths.forEach(function(ele) {
+    					if(ele) {
+    						cssPaths.push(ele);
+    					}
+    				});
+    			}
+    		});
+    		return cssPaths;
 	    })();
     grunt.initConfig({
         uglify: {
@@ -87,20 +81,9 @@ module.exports = function(grunt) {
             }
         },
         cssurl: {
-            options: (function() {
-            	if(!pkg.cfg.cssPaths[0].baseDir) {
-            		//单个baseDir的配置
-            		return {
-                        baseDir: pkg.cfg.baseDir,
-                        basePaths: pkg.cfg.basePaths
-                    };
-            	}else {
-            		//多个baseDir的配置
-            		return {
-            			multipleBases: pkg.cfg.cssPaths
-        			};
-            	}
-            })(),
+            options: {
+    			allOpts: pkg.cfg.cssPaths
+			},
             batch: {
                 files: (function(){
                     var files = [];

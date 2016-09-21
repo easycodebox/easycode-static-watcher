@@ -24,21 +24,21 @@ module.exports = function(grunt) {
         }
       });
       async.map(files, function(filepath, callback) {
-    	if(opts.multipleBases) {
-    		//多个baseDir的配置，则解析成相对应的baseDir
-    		START:
-    		for(var i = 0; i < opts.multipleBases.length; i++) {
-    			for(var j = 0; j < opts.multipleBases[i].filePaths.length; j++) {
-    				if(filepath.endsWith(path.relative(opts.multipleBases[i].filePaths[j], filepath))) {
-    					opts.baseDir = opts.multipleBases[i].baseDir;
-    					opts.basePaths = opts.multipleBases[i].basePaths;
-    					break START;
-    				}
-    			}
-    		}
-    	}
+        var newOpt;
+		//多个baseDir的配置，则解析成相对应的baseDir
+		START:
+		for(var i = 0; i < opts.allOpts.length; i++) {
+			for(var j = 0; j < opts.allOpts[i].filePaths.length; j++) {
+				if(filepath.endsWith(path.relative(opts.allOpts[i].filePaths[j], filepath))) {
+					newOpt = opts.allOpts[i];
+					break START;
+				}
+			}
+		}
         //处理CSS文件
-        cssurl.cssurl(filepath, opts, callback);
+        if (newOpt) {
+        	cssurl.cssurl(filepath, newOpt, callback);
+        }
       }, function(err, results) {
         if(err) throw err;
         callback();

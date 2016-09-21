@@ -1,37 +1,32 @@
 {
   "name": "easycode-static-watcher",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "author": "WangXiaojin",
   "description": "this is watching static files project",
   "main": "index.js",
   "cfg": {
-  	"jsPaths": [
-      "../easycode-static/list/js"
-    ],
-    "cssPaths": [
-      "../easycode-static/list/css",
-      "../easycode-static/list/js"
-    ],
-    "htmlPaths": [
-      "../easycode-static/list/html"
-    ],
-    "baseDir": "../easycode-static/list",
-    "basePaths": ["//cdn.domain.com"]
-  },
-  "cfgStandby": {
     "jsPaths": [
-      "../easycode-static/list/js"
+      "../easycode-static/list",
+	  "../easycode-auth-backend/js",
+	  "../easycode-cas/js",
+	  "../easycode-cas/themes"
     ],
     "cssPaths": [
     	{
+			"verifyExist": false,
     		"baseDir": "../easycode-static/list",
-    		"basePaths": ["//cdn.domain.com"],
-    		"filePaths": ["../easycode-static/list/css", "../easycode-static/list/js"]
+    		"basePaths": ["//cdn.easycodebox.com"],
+    		"filePaths": ["../easycode-static/list"]
     	},
     	{
-    		"baseDir": "../auth-backend",
-    		"basePaths": ["//auth.domain.com"],
-    		"filePaths": ["../auth-backend/css", "../auth-backend/js"]
+    		"baseDir": "../easycode-auth-backend",
+    		"basePaths": ["//auth.easycodebox.com"],
+    		"filePaths": ["../easycode-auth-backend/css", "../easycode-auth-backend/js"]
+    	},
+		{
+    		"baseDir": "../easycode-cas",
+    		"basePaths": ["//sso.easycodebox.com"],
+    		"filePaths": ["../easycode-cas/css", "../easycode-cas/themes"]
     	},
     	{
     		"baseDir": "/data/webroot/xxx",

@@ -17,7 +17,7 @@ var async = require('async');
 
 var options = {
       baseDir: process.cwd(), //css文件出现绝对路径时（以单个 "/" 开头的url），基路径地址。类似于"http://www.xxx.com" == "/data/web/xxx"
-      stripParams: false, //删除url地址后的参数
+      stripParamsAndAnchor: false, //删除url地址后的参数和锚点
       include: null,  //返回true则处理此url。格式：function(url) { return true; }
       exclude: null,  //返回true则不处理此url。格式：function(url) { return true; }
 
@@ -120,8 +120,11 @@ exports.init = function() {
      * @param url
      * @returns {string}
      */
-    var stripUrlParams = function (url) {
-      return url.indexOf("?") < 0 ? url : url.substring(0, url.indexOf("?"));
+    var stripUrlParamsAndAnchor = function (url) {
+      var qusIndex = url.indexOf("?"),
+      url = qusIndex < 0 ? url : url.substring(0, qusIndex);
+      var anchorIndex = url.lastIndexOf("#");
+      return anchorIndex < 0 ? url : url.substring(0, anchorIndex);
     };
     /**
      * 判断url对应的内容是否存在，不存在则抛异常
@@ -144,7 +147,7 @@ exports.init = function() {
             });
           }
         }else {
-          assert(fs.existsSync(stripUrlParams(url)), "The file " + url + " not exist.");
+          assert(fs.existsSync(stripUrlParamsAndAnchor(url)), "The file " + url + " not exist.");
         }
       }
     };
@@ -192,7 +195,7 @@ exports.init = function() {
                 request({url: exports.isCDN(url) ? 'http:' + url : url, encoding: null }, function (err, response, body) {
                   if (!err && response.statusCode == 200) {
                     var urlObj = {
-                          mimeType: mime.lookup(stripUrlParams(url)),
+                          mimeType: mime.lookup(stripUrlParamsAndAnchor(url)),
                           size: body.length
                         };
                     if(!opts.maxSize || body.length <= units.convert(opts.maxSize + ' to B')) {
@@ -207,13 +210,13 @@ exports.init = function() {
               });
               return syntax + url;
             }else {
-              var fileSize = fs.statSync(stripUrlParams(url))['size'];
+              var fileSize = fs.statSync(stripUrlParamsAndAnchor(url))['size'];
               if(opts.maxSize && fileSize > units.convert(opts.maxSize + ' to B')) {
                 console.log("File " + url + " is greater than " + opts.maxSize);
               }else {
-                var content = fs.readFileSync(stripUrlParams(url));
+                var content = fs.readFileSync(stripUrlParamsAndAnchor(url));
                 fileCache[url] = {
-                  mimeType: mime.lookup(stripUrlParams(url)),
+                  mimeType: mime.lookup(stripUrlParamsAndAnchor(url)),
                   data: content.toString('base64'),
                   size: fileSize
                 };
@@ -237,21 +240,21 @@ exports.init = function() {
             //验证文件是否存在
             verifyFileExist(url);
             //删除url的参数
-            url = opts.stripParams ? stripUrlParams(url) : url;
+            url = opts.stripParamsAndAnchor ? stripUrlParamsAndAnchor(url) : url;
             //绝对路径转换成http请求
             return syntax + urlUtil.resolve(getBasePath(), path.relative(opts.baseDir, url));
           }else if(url.startsWith("/") && !exports.isCDN(url)) {
             //验证文件是否存在
             verifyFileExist(path.join(opts.baseDir, url));
             //删除url的参数
-            url = opts.stripParams ? stripUrlParams(url) : url;
+            url = opts.stripParamsAndAnchor ? stripUrlParamsAndAnchor(url) : url;
             //非CDN的绝对路径：/imgs/xxx.jpg ==> http://www.xxx.com/imgs/xxx.jpg
             return syntax + urlUtil.resolve(getBasePath(), url);
           }else {
             //http文件验证是否存在
             verifyFileExist(url);
             //删除url的参数
-            url = opts.stripParams ? stripUrlParams(url) : url;
+            url = opts.stripParamsAndAnchor ? stripUrlParamsAndAnchor(url) : url;
             return syntax + url;
           }
         }
